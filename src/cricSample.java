@@ -15,7 +15,7 @@ public class cricSample {
 	public static void scrnShot(WebDriver driver, String path) throws IOException {
 		TakesScreenshot sc = (TakesScreenshot) driver;
 		File imgFile = sc.getScreenshotAs(OutputType.FILE);
-		String partPath="/Users/sandeep/Desktop";
+		String partPath="/Users/sandeep/Desktop/TestShots/";
 		FileUtils.copyFile(imgFile,new File(partPath+path+".jpeg"));
 		
 	}

@@ -23,6 +23,44 @@ public class ExpediaPractice {
 			}	
 		}
 	}
+	public void selectDate(WebDriver driver, String monthName, int dateNum) throws InterruptedException {
+		List<WebElement> months = new ArrayList<WebElement>();
+		List<WebElement> dateTable= new ArrayList<WebElement>();
+		List<WebElement> btnClick = new ArrayList<WebElement>();
+		List<WebElement> dateBtn = new ArrayList<WebElement>();
+		int dateVal;
+		WebElement datePicker;
+		int i=0; //counter
+		while(true) {
+			months= driver.findElements(By.cssSelector("div.uitk-date-picker-month h2"));
+			dateTable=driver.findElements(By.cssSelector("table.uitk-date-picker-weeks"));
+			if(months.get(i).getText().contains(monthName)) {
+				Thread.sleep(2000);
+				datePicker = dateTable.get(i);
+				dateBtn=datePicker.findElements(By.cssSelector("tbody tr td button"));
+				for(int j=0; j<dateBtn.size(); j++) {
+					dateVal = Integer.parseInt(dateBtn.get(j).getAttribute("data-day"));
+					if(dateVal==dateNum) {
+						dateBtn.get(j).click();
+						Thread.sleep(3000);
+						break;
+					}
+				}
+				break;
+			}
+			i++;
+			if(i==2) {
+				btnClick=driver.findElements(By.xpath("//div[@class='uitk-calendar']/div/button"));
+				//for(int m=0;m<btnClick.size();m++) {
+					btnClick.get(1).click();
+					Thread.sleep(1000);
+					btnClick.get(1).click();
+				i=0;
+			}
+					
+				
+		}
+	}
 	
 	public static void main(String[] args) throws InterruptedException {
 		ExpediaPractice expedia = new ExpediaPractice();
@@ -44,47 +82,13 @@ public class ExpediaPractice {
 		Thread.sleep(2000);
 		expedia.selectLocation(driver, toAirport);
 		Thread.sleep(2000);
-		//From Date
+		//Dates
 		driver.findElement(By.id("d1-btn")).click();
 		Thread.sleep(3000);
-		List<WebElement> months = new ArrayList<WebElement>();
-		List<WebElement> dateTable= new ArrayList<WebElement>();
-		List<WebElement> btnClick = new ArrayList<WebElement>();
-		List<WebElement> dateBtn = new ArrayList<WebElement>();
-		int dateVal;
-		WebElement datePicker;
-		int i=0; //counter
-		while(true) {
-			months= driver.findElements(By.cssSelector("div.uitk-date-picker-month h2"));
-			dateTable=driver.findElements(By.cssSelector("table.uitk-date-picker-weeks"));
-			if(months.get(i).getText().contains("July")) {
-				Thread.sleep(2000);
-				datePicker = dateTable.get(i);
-				dateBtn=datePicker.findElements(By.cssSelector("tbody tr td button"));
-				for(int j=0; j<dateBtn.size(); j++) {
-					dateVal = Integer.parseInt(dateBtn.get(j).getAttribute("data-day"));
-					if(dateVal==14) {
-						dateBtn.get(j).click();
-						Thread.sleep(3000);
-						break;
-					}
-				}
-				break;
-			}
-			i++;
-			if(i==2) {
-				btnClick=driver.findElements(By.xpath("//div[@class='uitk-calendar']/div/button"));
-				//for(int m=0;m<btnClick.size();m++) {
-					btnClick.get(1).click();
-					Thread.sleep(1000);
-					btnClick.get(1).click();
-				i=0;
-			}
-					
-				
-		}
-		
-		
+		expedia.selectDate(driver,"July",14);
+		expedia.selectDate(driver,"August",6);
+		Thread.sleep(2000);
+		driver.findElement(By.cssSelector("div.uitk-flex.uitk-date-picker-menu-footer button")).click();		
 		Thread.sleep(2000);
 		driver.quit();
 	}
